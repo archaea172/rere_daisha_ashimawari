@@ -132,8 +132,18 @@ void HAL_FDCAN_RxFifo1Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo1ITs)
 		}
     if (0x200 == RxHeader.Identifier)
     {
-      v[0] = RxData[0];
-      v[1] = RxData[1];
+      union Data
+      {
+        uint32_t data_ui32;
+        float32_t data_f32;
+      };
+      for (int i = 0; i < 2; i++)
+      {
+        union Data data;
+        data.data_ui32 = (uint32_t)((RxData[i*4] << 24) | (RxData[i*4 + 1] << 16) | (RxData[i*4 + 2] << 8) | RxData[i*4 + 3]);
+        v[i] = data.data_f32;
+      }
+      
     }
 	}
 }

@@ -22,6 +22,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
+#include <math.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -39,7 +40,7 @@ typedef struct
 {
   uint16_t CANID;
   uint8_t motorID;
-  float trgVel;
+  volatile float trgVel;
 }hiradora;
 
 typedef float float32_t;
@@ -48,7 +49,7 @@ typedef uint16_t float16_t;
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define r 0.06617//m
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -230,7 +231,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    printf("vr:%f, vl:%f", Hiradora[0].trgVel, Hiradora[1].trgVel);
+    printf("vr:%f, vl:%f\r\n", Hiradora[0].trgVel, Hiradora[1].trgVel);
     uint8_t TxData[8] = {
       0, 1, 2, 3,
       4, 5, 6, 7

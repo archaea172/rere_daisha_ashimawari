@@ -87,6 +87,8 @@ hiradora Hiradora[8] = {
   {0x407, 7, 0},
   {0x408, 8, 0},
 };
+
+volatile float v[2] = {0};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -125,6 +127,11 @@ void HAL_FDCAN_RxFifo1Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo1ITs)
 			printf("fdcan_getrxmessage is error\r\n");
 			Error_Handler();
 		}
+    if (0x200 == RxHeader.Identifier)
+    {
+      v[0] = RxData[0];
+      v[1] = RxData[1];
+    }
 	}
 }
 

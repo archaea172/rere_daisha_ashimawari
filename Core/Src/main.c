@@ -169,6 +169,14 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 	}
 }
 
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  if (&htim6 == htim)
+  {
+    
+  }
+}
+
 int _write(int file,char *ptr,int len)
 {
   HAL_UART_Transmit(&huart2, (uint8_t*)ptr, len, 10);

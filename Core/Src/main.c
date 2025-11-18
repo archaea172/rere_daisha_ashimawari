@@ -228,6 +228,13 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    printf("vr:%f, vl:%f", Hiradora[0].trgVel, Hiradora[1].trgVel);
+    uint8_t TxData[8] = {
+      0, 1, 2, 3,
+      4, 5, 6, 7
+    };
+    CAN_SEND(0x23, TxData, &hfdcan1, &TxHeader);
+    HAL_Delay(50);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

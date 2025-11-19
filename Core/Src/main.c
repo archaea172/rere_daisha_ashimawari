@@ -174,8 +174,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   if (&htim6 == htim)
   {
-    Hiradora[0].trgVel = v[0];
-    Hiradora[1].trgVel = v[1];
+    Hiradora[0].trgVel = v[1]*60/(r*M_PI);
+    Hiradora[1].trgVel = -v[0]*60/(r*M_PI);
     move_hiradora(Hiradora);
   }
 }

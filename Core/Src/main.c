@@ -231,7 +231,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    printf("vr:%f, vl:%f\r\n", Hiradora[0].trgVel, Hiradora[1].trgVel);
+    printf("vr:%f, vl:%f\r\n", v[0], v[1]);
     uint8_t TxData[8] = {
       0, 1, 2, 3,
       4, 5, 6, 7

@@ -180,6 +180,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     Hiradora[1].trgVel = -v[0]*60/(r*M_PI);
     move_hiradora(Hiradora);
   }
+  else if (&htim7 == htim)
+  {
+    
+  }
 }
 
 int _write(int file,char *ptr,int len)

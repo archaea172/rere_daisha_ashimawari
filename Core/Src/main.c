@@ -31,9 +31,25 @@ typedef struct{
 	volatile uint16_t CANID;
 	volatile uint8_t motorID;
 	volatile int16_t actVel;
+	volatile int16_t p_actVel;
 	volatile int16_t actangle;
+	volatile int16_t p_actangle;
 	volatile int16_t actCurrent;
-  volatile int16_t cu;
+	volatile int16_t cu;
+	volatile float motor_pos_ref;
+	volatile float motor_spd;
+	volatile float motor_spd_ref;
+	volatile float pos_err;
+	volatile float last_pos_err;
+	volatile float sum_pos_err;
+	volatile float sum_err;
+	volatile float output_val;
+	volatile uint32_t last_update_time;
+	volatile float diff_pro;
+	volatile float motor_pos;
+	volatile int16_t trgVel;
+	volatile float hensa;
+	volatile float ind;
 }motor;
 
 typedef struct
@@ -70,15 +86,11 @@ UART_HandleTypeDef huart2;
 FDCAN_TxHeaderTypeDef TxHeader;
 FDCAN_TxHeaderTypeDef TxHeader_motor;
 
-motor robomas[8] = {
-  {0x201, 1, 0, 0, 0, 0},
-  {0x202, 2, 0, 0, 0, 0},
-  {0x203, 3, 0, 0, 0, 0},
-  {0x204, 4, 0, 0, 0, 0},
-  {0x205, 5, 0, 0, 0, 0},
-  {0x206, 6, 0, 0, 0, 0},
-  {0x207, 7, 0, 0, 0, 0},
-  {0x208, 8, 0, 0, 0, 0},
+motor robomas[4] = {
+  {0x201, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+  {0x202, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+  {0x203, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+  {0x204, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 };
 
 hiradora Hiradora[8] = {
@@ -93,6 +105,10 @@ hiradora Hiradora[8] = {
 };
 
 volatile float v[2] = {0};
+
+float kp = 300, ki = 0, kd = 0;
+float max_sum_pos_err = 10000;
+float max_output_val = 10000;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/

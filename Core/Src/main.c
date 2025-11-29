@@ -199,6 +199,48 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   else if (&htim7 == htim)
   {
     
+    for (int i = 0; i < 1; i++) {
+      robomas[i].motor_spd = (float)robomas[i].actVel / 60.0;
+
+      robomas[i].diff_pro=(float)(robomas[i].actangle - robomas[i].p_actangle);
+
+      float diff;
+      if(robomas[i].actVel >=10000){
+        diff = (robomas[i].diff_pro < 0 ? robomas[i].diff_pro + 8192 : robomas[i].diff_pro);
+      }else if(robomas[i].actVel <= -10000){
+        diff = (robomas[i].diff_pro > 0 ? robomas[i].diff_pro - 8192 : robomas[i].diff_pro);
+      }else if( robomas[i].diff_pro < 5000 && robomas[i].diff_pro > -5000){
+        diff = robomas[i].diff_pro;
+      }else if (robomas[i].diff_pro > 0){
+        diff = robomas[i].diff_pro - 8192;
+      }else
+        diff = robomas[i].diff_pro + 8192;
+
+      robomas[i].p_actangle = robomas[i].actangle;
+
+      float dt = 0.001;
+      robomas[i].motor_pos += diff/8192.0;
+      robomas[i].motor_spd = diff / 8192.0 / dt;
+
+      float p_gain = (robomas[i].motor_pos_ref - robomas[i].motor_pos) * kp;
+      robomas[i].pos_err = robomas[i].motor_pos_ref - robomas[i].motor_pos;
+      if(robomas[i].pos_err>10||robomas[i].pos_err<-10){
+        robomas[i].pos_err = 0;
+      }
+      robomas[i].sum_pos_err += robomas[i].pos_err * dt;
+      robomas[i].last_pos_err = robomas[i].pos_err;
+      if(robomas[i].sum_pos_err >= max_sum_pos_err){
+        robomas[i].sum_pos_err = max_sum_pos_err;
+      }
+      else if(robomas[i].sum_pos_err <= -max_sum_pos_err){
+        robomas[i].sum_pos_err = -max_sum_pos_err;
+      }
+      float i_gain = robomas[i].sum_pos_err * ki;
+
+      float d_gain = robomas[i].motor_spd * kd;
+
+      robomas[i].trgVel = (p_gain + i_gain + d_gain);
+    }
   }
 }
 

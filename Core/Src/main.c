@@ -164,6 +164,17 @@ void HAL_FDCAN_RxFifo1Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo1ITs)
       }
       
     }
+    else if (0x201 == RxHeader.Identifier)
+    {
+      union Data
+      {
+        uint32_t data_ui32;
+        float32_t data_f32;
+      };
+      union Data data;
+      data.data_ui32 = (uint32_t)((RxData[0] << 24) | (RxData[1] << 16) | (RxData[2] << 8) | RxData[3]);
+      robomas[0].motor_pos_ref = data.data_f32;
+    }
 	}
 }
 

@@ -228,6 +228,7 @@ int main(void)
   if (HAL_OK != motor_CAN_RxTxSettings_init(&TxHeader_motor)) Error_Handler();
 
   HAL_TIM_Base_Start_IT(&htim6);
+  HAL_TIM_Base_Start_IT(&htim7);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -235,12 +236,6 @@ int main(void)
   while (1)
   {
     printf("vr:%f, vl:%f\r\n", v[0], v[1]);
-    uint8_t TxData[8] = {
-      0, 1, 2, 3,
-      4, 5, 6, 7
-    };
-    CAN_SEND(0x23, TxData, &hfdcan1, &TxHeader);
-    HAL_Delay(50);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
